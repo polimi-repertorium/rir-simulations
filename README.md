@@ -3,7 +3,7 @@ Repositiory for the RIR simulations of controlled room acoustics with ULA and SM
 
 ## Simulation pipeline
 The following image depicts the general pipeline for the desired RIR simulation framework.
-![pipeline](imgs/pipeline.pdf "pipeline")
+![pipeline](imgs/pipeline.png "pipeline")
 
 
 ## Folder structure
