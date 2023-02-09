@@ -1,5 +1,5 @@
 # RIR-SIMULATIONS
-Repositiory for the RIR simulations of controlled room acoustics with ULA and SMA.
+Repositiory for RIR simulations of controlled room acoustics with ULA and SMA.
 
 ## Simulation pipeline
 The following image depicts the general pipeline for the desired RIR simulation framework.
