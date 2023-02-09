@@ -19,3 +19,10 @@ rir-simulations
 ├── README.md
 └── LICENSE
 ```
+
+## TODO list
+- [x] Block scheme pipeline
+- [ ] RIR & SMIR generators
+- [ ] Read room setting from JSON file
+- [ ] Mics on nodal lines of the room
+- [ ] Comparison between input T60 and estimated T60 from the computed RIR
