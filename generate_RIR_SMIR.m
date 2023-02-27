@@ -3,7 +3,7 @@ addpath('src')
 addpath('./src/lib')
 addpath('./src/SMIR-Generator/')
 addpath('./src/RIR-Generator/')
-addpath('rir-simulations/generate_RIR_SMIR.m')
+addpath('rir-simulations/generate_RIR_SMIRa.m')
 
 fname = 'nextwall_y.json';
 file_path  = fullfile("configurations/",fname);
@@ -67,17 +67,6 @@ fprintf("T60 estimated (smir): %s\n", T60_smir)
 T60_rir = RT60.Estimate_RT60(h_rir,config.procFs,ECD_region,plot_ok);
 fprintf("T60 estimated (rir): %s\n", T60_rir)
 
-if isscalar(config.room.beta)
-    beta = config.room.beta;
-    fprintf("T60 given as input: %f\n", beta)
-else
-    fprintf("Only coefficientes have been given as input.\n")
-end
-
-if ~isscalar(config.room.beta)
-    RT60_sab = RT60.sabine_formula(config.room.dimension, config.room.beta);
-    fprintf("T60 using sabine formula (beta given as coefficients): %f\n", RT60_sab)
-end
 
 %% room mode
 Nx = 0;
