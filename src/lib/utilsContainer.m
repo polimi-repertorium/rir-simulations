@@ -13,5 +13,10 @@ classdef utilsContainer
             display(freq)
             
         end
+
+        function err = rir_error(~, h_smir, h_rir)
+            err = 10*log10(rmse(h_smir, h_rir, 2));
+        end
+
     end
 end

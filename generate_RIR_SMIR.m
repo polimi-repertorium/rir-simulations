@@ -1,11 +1,9 @@
-addpath('configurations')
-addpath('src')
-addpath('./src/lib')
-addpath('./src/SMIR-Generator/')
-addpath('./src/RIR-Generator/')
-addpath('rir-simulations/generate_RIR_SMIRa.m')
+addpath('rir-simulations/configurations')
+addpath('rir-simulations/src/lib')
+addpath('rir-simulations/src/SMIR-Generator/')
+addpath('rir-simulations/src/RIR-Generator/')
 
-fname = 'nextwall_y.json';
+fname = 'base_config.json';
 file_path  = fullfile("configurations/",fname);
 
 % TODO: Mic need to/4e added as angles to the JSON file
@@ -77,3 +75,7 @@ fprintf("Freq a mode Nx, Ny, Nx: %i,%i,%i\n", Nx, Ny, Nz);
 
 H_rir = fft(h_rir, [], 2);
 plotcontainer.plot_frequency_RIR(H_rir, config.procFs, config.nsample)
+
+
+
+
