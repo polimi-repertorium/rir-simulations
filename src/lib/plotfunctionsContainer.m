@@ -82,5 +82,18 @@ classdef plotfunctionsContainer
             ylabel('Amplitude (dB)');
             legend('RIR generator');
         end
+
+
+        function [] = save_plot(~, table, x, y, x_range, y_range, dir)
+            figure;
+            plot(table.(x), table.(y));
+            title(strcat(x, ' vs ', y));
+            xlabel(x)
+            ylabel(y)
+            set(gca,'xtick',x_range)
+            ylim(y_range)
+            filename_path = fullfile(dir,x+'_vs_'+y+'.png');
+            saveas(gcf,filename_path)
+        end
     end
 end

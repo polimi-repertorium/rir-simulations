@@ -6,19 +6,19 @@
     "K": 2,
     "room": 
     {
-        "dimension": [[6.4, 5, 4]],
+        "dimension": [[6.4, 5, 3]],
         "beta": 0.3,
-        "max_order": 3
+        "max_order": 30
     },
     "sphere":
     {
-        "location": [[1.5, 1.4, 1.6]],
+        "location": [[2.2, 2.3, 1.7]],
         "radius": 0.042,
         "type": "open"                       
     },
     "source":
     {
-        "location": [[1.3, 2, 1.6]],
+        "location": [[4.5, 2.7, 1.6]],
         "src_type": "o"
     },
     "ULA":

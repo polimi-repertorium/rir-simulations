@@ -18,5 +18,12 @@ classdef utilsContainer
             err = 10*log10(rmse(h_smir, h_rir, 2));
         end
 
+        % change function name
+        function [] = save_file(~, gcf, dir, filename)
+            mkdir(dir)
+            filename_path = fullfile(dir,filename);
+            saveas(gcf,filename_path)
+        end
+
     end
 end
