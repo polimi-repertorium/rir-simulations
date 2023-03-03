@@ -1,0 +1,29 @@
+{ 
+    "procFs": 16000,
+    "c": 343,
+    "nsample": 9600,
+    "N_harm": 30,
+    "K": 2,
+    "room": 
+    {
+        "dimension": [[11, 6, 3]],
+        "beta": 0.6,
+        "max_order": 30
+    },
+    "sphere":
+    {
+        "location": [[3.8, 2.5, 1.7]],
+        "radius": 0.042,
+        "type": "open"                       
+    },
+    "source":
+    {
+        "location": [[7.9, 4.3, 1.6]],
+        "src_type": "o"
+    },
+    "ULA":
+    {
+        "position": [[2, 1.5, 2]]
+    }
+
+}

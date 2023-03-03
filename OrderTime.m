@@ -13,7 +13,7 @@ mkdir(plot_folder)
 mkdir(room_config_folder)
 mkdir(RIR_folder)
 
-room = 'medium1';
+room = 'big2';
 filename = strcat('order_time_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
@@ -97,7 +97,7 @@ title("Order vs Time");
 xlabel("Order")
 ylabel("Time (s)")
 set(gca,'xtick',0:config.room.max_order)
-ylim([0 450])
+ylim([0 900])
 filename_path = fullfile(plot_folder, strcat('order_vs_time_', room, '.png'));
 saveas(gcf,filename_path)
 %plotcontainer.save_plot(table_test, "Order", "Time", 1:config.room.max_order, [0 results(config.room.max_order, 2)], plot_folder)
