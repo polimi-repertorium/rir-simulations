@@ -17,7 +17,7 @@ mkdir(RIR_folder)
 mkdir(T60_folder)
 
 room = 'big2';
-filename = strcat('order_time_', room);
+filename = strcat('harmonics_time_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
 
@@ -37,19 +37,19 @@ config = utils.read_json(file_path);
 [mic_pos(:,1), mic_pos(:,2), mic_pos(:,3)] = mysph2cart(mic(:,1),mic(:,2),config.sphere.radius); % Microphone positions relative to centre of array ("sphLocation")
  mic_pos = mic_pos + repmat(config.sphere.location,size(mic,1),1);
 
- % plot room 
-plotcontainer.plot_room(mic_pos, config.sphere.location, config.source.location, config.room.dimension)
-room_filename_path = fullfile(room_config_folder, strcat(filename, '.png'));
-saveas(gcf,room_filename_path);
-
 % initialization of results arrays
-results = zeros(config.room.max_order,3);
+results = zeros(config.N_harm_max,5);
 
-for order = 1:config.room.max_order
-    %adding order
-    results(order+1,1) = order;
+nsample = sprintf("%d", (config.room.beta * 1.5 * config.procFs));
+nsample = double(nsample);
+fprintf("Nsample: %d", nsample)
+
+for harmonics = 1:config.N_harm_max
+    %adding harmonics
+    results(harmonics,1) = harmonics;
     
     t_smir_start = tic;
+    
     [h_smir, H_smir, beta_hat] = smir_generator(config.c, ...
             config.procFs, ...
             config.sphere.location, ...
@@ -59,10 +59,10 @@ for order = 1:config.room.max_order
             config.sphere.type, ...
             config.sphere.radius, ...
             mic, ...
-            config.N_harm, ...
-            config.nsample, ...
+            harmonics, ...
+            nsample, ...
             config.K, ...
-            order, ...
+            config.room.order, ...
             0, ...
             0, ...
             config.source.src_type, ...
@@ -70,75 +70,75 @@ for order = 1:config.room.max_order
     t_smir_end = toc(t_smir_start);
     
     % timing
-    results(order+1,2) = t_smir_end;
+    results(harmonics,2) = t_smir_end;
 
     % rir generation
-    h_rir = 4*pi*rir_generator(config.c, config.procFs, mic_pos, config.source.location, config.room.dimension, config.room.beta, config.nsample, 'omnidirectional', order, 3, [0 0], false);
+    h_rir = 4*pi*rir_generator(config.c, config.procFs, mic_pos, config.source.location, config.room.dimension, config.room.beta, nsample, 'omnidirectional', config.room.order, 3, [0 0], false);
     err = utils.rir_error(h_rir, h_smir);
-    results(order+1,3) = err;
+    results(harmonics,3) = err;
 
     %create plots and save them as pics into folder
-    if (order == 1 || order == 6 || order == 10 || order == 20 || order == 30)
+    if (harmonics == 1 || harmonics == 6 || harmonics == 10 || harmonics == 20 || harmonics == 30)
         H_rir = fft(h_rir, [], 2);
-        plotcontainer.compare_rir(1, h_rir, h_smir, H_rir, H_smir, config.K, config.nsample, config.procFs)
-        RIR_filename_path = fullfile(RIR_folder, strcat(filename, '_order_', string(order), '.png'));
+        plotcontainer.compare_rir(1, h_rir, h_smir, H_rir, H_smir, config.K, nsample, config.procFs)
+        RIR_filename_path = fullfile(RIR_folder, strcat(filename, '_harmonics_', string(harmonics), '.png'));
         saveas(gcf,RIR_filename_path);
     end
 
     % T60 SMIR estimation 
-    if (order == 1 || order == 6 || order == 10 || order == 20 || order == 30)
+    if (harmonics == 1 || harmonics == 6 || harmonics == 10 || harmonics == 20 || harmonics == 30)
         plot_ok=1;
         T60_smir = Estimate_T60(h_smir, config.procFs, plot_ok);
-        T60_plot_path = fullfile(T60_folder, strcat(filename, '_smir_order_', string(order), '.png'));
+        T60_plot_path = fullfile(T60_folder, strcat(filename, '_smir_harmonics_', string(harmonics), '.png'));
         saveas(gcf,T60_plot_path);
     else
         plot_ok=0;
         T60_smir = Estimate_T60(h_smir, config.procFs, plot_ok);
     end
-    results(order+1,4) = T60_smir;
+    results(harmonics,4) = T60_smir;
 
     % T60 RIR estimation 
-    if (order == 1 || order == 6 || order == 10 || order == 20 || order == 30)
+    if (harmonics == 1 || harmonics == 6 || harmonics == 10 || harmonics == 20 || harmonics == 30)
         plot_ok=1;
         T60_rir = Estimate_T60(h_rir, config.procFs, plot_ok);
-        T60_plot_path = fullfile(T60_folder, strcat(filename, '_rir_order_', string(order), '.png'));
+        T60_plot_path = fullfile(T60_folder, strcat(filename, '_rir_harmonics_', string(harmonics), '.png'));
         saveas(gcf,T60_plot_path);
     else
         plot_ok=0;
         T60_rir = Estimate_T60(h_rir, config.procFs, plot_ok);
     end
-    results(order+1,5) = T60_rir;
+    results(harmonics,5) = T60_rir;
 
-    results(order+1,6) = utils.rir_error(T60_smir, T60_rir);
+    results(harmonics,6) = utils.rir_error(T60_smir, T60_rir);
 end 
 
 %% save csv file
-res_table = array2table(results, "VariableNames",["Order","Time","Error","T60_smir","T60_rir","T60_err"]);
-full_file_path = fullfile(csv_folder, strcat('order_time_', room, '.csv'));
+res_table = array2table(results, "VariableNames",["Harmonics","Time","Error","T60_smir","T60_rir","T60_err"]);
+full_file_path = fullfile(csv_folder, strcat('harmonics_', room, '.csv'));
 writetable(res_table,full_file_path);
 
 
 %% plot
-% order vs time plot
+% harmonics vs time plot
 figure;
-plot(res_table.("Order"), res_table.("Time"));
-title("Order vs Time");
-xlabel("Order")
+plot(res_table.("Harmonics"), res_table.("Time"));
+title("Harmonics vs Time");
+xlabel("Harmonics")
 ylabel("Time (s)")
-set(gca,'xtick',0:config.room.max_order)
+set(gca,'xtick',0:config.N_harm_max)
 ylim([0 900])
-filename_path = fullfile(plot_folder, strcat('order_vs_time_', room, '.png'));
+filename_path = fullfile(plot_folder, strcat('harmonics_vs_time_', room, '.png'));
 saveas(gcf,filename_path)
-%plotcontainer.save_plot(table_test, "Order", "Time", 1:config.room.max_order, [0 results(config.room.max_order, 2)], plot_folder)
 
-% order vs error
+
+% harmonics vs error
 figure;
-plot(res_table.("Order"), res_table.("Error"));
-title("Order vs Error");
-xlabel("Order")
+plot(res_table.("Harmonics"), res_table.("Error"));
+title("Harmonics vs Error");
+xlabel("Harmonics")
 ylabel("Error SMIR / RIR (dB)")
-set(gca,'xtick',1:config.room.max_order)
+set(gca,'xtick',1:config.N_harm_max)
 ylim([-40 -20])
-filename_path = fullfile(plot_folder,strcat('order_vs_error_', room, '.png'));
+filename_path = fullfile(plot_folder,strcat('harmonics_vs_error_', room, '.png'));
 saveas(gcf,filename_path)
-%plotcontainer.save_plot(table_test, "Order", "Error", 1:config.room.max_order, [-40 -20], plot_folder)
+

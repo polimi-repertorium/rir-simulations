@@ -13,9 +13,9 @@ for file_id = 1:n_test
 end
 
 %% plot
-
 linewidth = 2;
-% order vs time plot
+
+%% order vs time plot
 figure;
 for i = 1:n_test
     plot(cell2mat(tables{i}(:, 1)), cell2mat(tables{i}(:, 2)), 'LineWidth', linewidth);
@@ -23,7 +23,7 @@ for i = 1:n_test
 end    
 grid on;
 grid minor;
-title("Order vs Time");
+title("Order - Time");
 xlabel("Order")
 ylabel("Time (s)")
 set(gca,'xtick',0:30+1)
@@ -33,7 +33,7 @@ legend(filenames)
 saveas(gcf,filename_path)
 
 
-% order vs error
+%% order vs error plot
 figure;
 for i = 1:n_test
     plot(cell2mat(tables{i}(:, 1)), cell2mat(tables{i}(:, 3)), 'LineWidth', linewidth);
@@ -41,11 +41,46 @@ for i = 1:n_test
 end  
 grid on;
 grid minor;
-title("Order vs Error");
+title("Order - Error");
 xlabel("Order")
 ylabel("Error SMIR / RIR (dB)")
 set(gca,'xtick',1:30+1)
 ylim([-45 -20])
 filename_path = fullfile(plot_folder, 'order_vs_error_all.png');
+legend(filenames)
+saveas(gcf,filename_path)
+
+
+%% order vs T60 (smir)
+figure;
+for i = 1:n_test
+    plot(cell2mat(tables{i}(:, 1)), cell2mat(tables{i}(:, 4)), 'LineWidth', linewidth);
+    hold on;
+end  
+grid on;
+grid minor;
+title("Order - T60 (SMIR)");
+xlabel("Order")
+ylabel("T60 estimation SMIR (s)")
+set(gca,'xtick',1:30+1)
+ylim([0 7])
+filename_path = fullfile(plot_folder, 'order_vs_T60smir_all.png');
+legend(filenames)
+saveas(gcf,filename_path)
+
+%% order vs T60 (rir)
+figure;
+for i = 1:n_test
+    plot(cell2mat(tables{i}(:, 1)), cell2mat(tables{i}(:, 5)), 'LineWidth', linewidth);
+    hold on;
+end  
+grid on;
+grid minor;
+title("Order - T60 (RIR)");
+xlabel("Order")
+ylabel("T60 estimation RIR (s)")
+set(gca,'xtick',1:30+1)
+ylim([0 2.5])
+filename_path = fullfile(plot_folder, 'order_vs_T60rir_all.png');
 legend(filenames)
 saveas(gcf,filename_path)

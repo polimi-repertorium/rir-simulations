@@ -1,14 +1,14 @@
 { 
     "procFs": 16000,
     "c": 343,
-    "nsample": 27200,
-    "N_harm": 30,
+    "nsample": 36000,
+    "N_harm_max": 30,
     "K": 2,
     "room": 
     {
         "dimension": [[7, 20, 4]],
-        "beta": 1.3,
-        "max_order": 30
+        "beta": 2,
+        "order": 20
     },
     "sphere":
     {

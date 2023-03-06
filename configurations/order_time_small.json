@@ -2,13 +2,13 @@
     "procFs": 16000,
     "c": 343,
     "nsample": 8192,
-    "N_harm": 30,
+    "N_harm_max": 1,
     "K": 2,
     "room": 
     {
         "dimension": [[3, 4, 2]],
         "beta": 0.3,
-        "max_order": 30
+        "max_order": 6
     },
     "sphere":
     {
