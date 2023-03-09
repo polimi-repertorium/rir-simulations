@@ -1,5 +1,6 @@
 %% save csv file
 filenames = ["small", "medium1", "medium2", "big1", "big2"];
+rooms_config = ["3*4*2 - 0.3", "5*4*2.5 - 0.5", "11*6*3 - 0.6", "7*20*4 - 1.3", "7*20*4 - 2.0"];
 csv_folder = ('rir-simulations/results_csv');
 plot_folder = ('rir-simulations/png/plots');
 
@@ -24,12 +25,12 @@ end
 grid on;
 grid minor;
 title("Harmonics - Time");
-xlabel("Order")
+xlabel("Harmonics")
 ylabel("Time (s)")
 set(gca,'xtick',0:30+1)
 ylim([0 800])
 filename_path = fullfile(plot_folder, 'harmonics_vs_time_all.png');
-legend(filenames)
+legend(rooms_config)
 saveas(gcf,filename_path)
 
 
@@ -47,7 +48,7 @@ ylabel("Error SMIR / RIR (dB)")
 set(gca,'xtick',1:30+1)
 ylim([-35 -15])
 filename_path = fullfile(plot_folder, 'harmonics_vs_error_all.png');
-legend(filenames)
+legend(rooms_config)
 saveas(gcf,filename_path)
 
 
@@ -65,7 +66,7 @@ ylabel("T60 estimation SMIR (s)")
 set(gca,'xtick',1:30+1)
 ylim([0 7])
 filename_path = fullfile(plot_folder, 'harmonics_vs_T60smir_all.png');
-legend(filenames)
+legend(rooms_config)
 saveas(gcf,filename_path)
 
 %% order vs T60 (rir)
@@ -82,5 +83,5 @@ ylabel("T60 estimation RIR (s)")
 set(gca,'xtick',1:30+1)
 ylim([0 2])
 filename_path = fullfile(plot_folder, 'harmonics_vs_T60rir_all.png');
-legend(filenames)
+legend(rooms_config)
 saveas(gcf,filename_path)

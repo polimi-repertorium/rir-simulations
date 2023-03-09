@@ -58,14 +58,14 @@ t_ULA_end = toc(t_ULA_start);
 disp(t_ULA_end)
 
 %%
-SPHERE_mic_max = 10;
+SPHERE_mic_max = 3;
 results = zeros(SPHERE_mic_max,2);
 
 for n_mic = 1:SPHERE_mic_max
     results(n_mic, 1) = n_mic;
     t_smir_start = tic;
     for sphere = 1:n_mic
-        fprintf("n_mic: %d; sphere: %d", n_mic, sphere)
+        fprintf("n_mic: %d; sphere: %d\n", n_mic, sphere)
         [h_smir, H_smir, beta_hat] = smir_generator(config.c, ...
             config.procFs, ...
             config.sphere.location, ...
