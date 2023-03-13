@@ -1,7 +1,7 @@
-addpath('rir-simulations/configurations');
-addpath('rir-simulations/src/lib');
-addpath('rir-simulations/src/SMIR-Generator/');
-addpath('rir-simulations/src/RIR-Generator/');
+addpath('configurations');
+addpath('src/lib');
+addpath('src/SMIR-Generator/');
+addpath('src/RIR-Generator/');
 
 room = 'small';
 filename = strcat('order_time_', room);
@@ -18,6 +18,7 @@ plotcontainer = plotfunctionsContainer;
 
 %% read json file
 config = utils.read_json(file_path);
+disp(config)
 
 %% generate rir with SMIR-Generator
 [src_ang(1),src_ang(2)] = mycart2sph(config.sphere.location(1)-config.source.location(1),config.sphere.location(2)-config.source.location(2),config.sphere.location(3)-config.source.location(3)); % Towards the receiver

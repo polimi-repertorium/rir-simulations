@@ -1,17 +1,17 @@
 clear;
 close all;
 clc;
-addpath('rir-simulations/configurations');
-addpath('rir-simulations/src/lib');
-addpath('rir-simulations/src/SMIR-Generator/');
-addpath('rir-simulations/src/RIR-Generator/');
+addpath('configurations');
+addpath('src/lib');
+addpath('src/SMIR-Generator/');
+addpath('src/RIR-Generator/');
 
 % mkdir folders
-room_config_folder = ('rir-simulations/png/rooms');
-plot_folder = ('rir-simulations/png/plots');
-RIR_folder = ('rir-simulations/png/RIR');
-T60_folder = ('rir-simulations/png/T60');
-csv_folder = ('rir-simulations/results_csv');
+room_config_folder = ('png/rooms');
+plot_folder = ('png/plots');
+RIR_folder = ('png/RIR');
+T60_folder = ('png/T60');
+csv_folder = ('results_csv');
 
 mkdir(csv_folder)
 mkdir(plot_folder)
@@ -19,7 +19,7 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'medium1';
+room = 'small';
 filename = strcat('multiple_mics_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
