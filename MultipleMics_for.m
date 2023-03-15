@@ -58,7 +58,7 @@ room_beta = config.room.beta;
 room_order = config.room.order;
 
 t_ULA_start = tic;
-parfor i = 1:ULA_n_mic
+for i = 1:ULA_n_mic
     h_rir = rir_generator(c, procFs, mic_pos, source_location, room_dimension, room_beta, nsample, 'omnidirectional', room_order, 3, [0 0], false);
 end
 t_ULA_end = toc(t_ULA_start);
