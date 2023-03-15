@@ -8,7 +8,7 @@
     {
         "dimension": [[3, 4, 2]],
         "beta": 0.3,
-        "order": 2
+        "order": 20
     },
     "sphere":
     {
