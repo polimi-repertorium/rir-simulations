@@ -47,9 +47,8 @@ fprintf("Nsample: %d", nsample)
 
 
 %% setting ULA mics (always same value, need to be changed)
-ULA_n_mic = 3;
+ULA_n_mic = 64;
 ULA=[config.ULA.position(1)*ones(ULA_n_mic,1), config.ULA.position(2)*ones(ULA_n_mic,1), config.ULA.position(3)*ones(ULA_n_mic,1)];
-
 
 c = config.c;
 procFs = config.procFs;
@@ -66,7 +65,7 @@ t_ULA_end = toc(t_ULA_start);
 disp(t_ULA_end)
 
 %%
-SPHERE_mic_max = 2;
+SPHERE_mic_max = 10;
 results = zeros(SPHERE_mic_max,2);
 
 sphere_location = config.sphere.location;
