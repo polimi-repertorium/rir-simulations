@@ -19,7 +19,7 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'small';
+room = 'medium1';
 filename = strcat('multiple_mics_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
@@ -106,7 +106,7 @@ end
 
 %% save csv file
 res_table = array2table(results, "VariableNames",["Multiple_mics","Time"]);
-full_file_path = fullfile(csv_folder, strcat('multiple_mics', room, '.csv'));
+full_file_path = fullfile(csv_folder, strcat('multiple_mics_', room, '.csv'));
 writetable(res_table,full_file_path);
 
 %% plot

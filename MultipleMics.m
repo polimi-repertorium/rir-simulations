@@ -19,7 +19,7 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'small';
+room = 'medium1';
 filename = strcat('multiple_mics_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
@@ -106,7 +106,7 @@ end
 
 %% save csv file
 res_table = array2table(results, "VariableNames",["Multiple_mics","Time"]);
-full_file_path = fullfile(csv_folder, strcat('multiple_mics_par', room, '.csv'));
+full_file_path = fullfile(csv_folder, strcat('multiple_mics_par_', room, '.csv'));
 writetable(res_table,full_file_path);
 
 %% plot
@@ -118,5 +118,5 @@ xlabel("Multiple mics")
 ylabel("Time (s)")
 set(gca,'xtick',1:20)
 ylim([160 250])
-filename_path = fullfile(plot_folder, strcat('multiple_mics_par', room, '.png'));
+filename_path = fullfile(plot_folder, strcat('multiple_mics_par_', room, '.png'));
 saveas(gcf,filename_path)
