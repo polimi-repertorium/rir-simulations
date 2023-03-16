@@ -20,7 +20,7 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'big1';
+room = 'big2';
 filename = strcat('order_time_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);

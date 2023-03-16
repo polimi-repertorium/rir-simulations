@@ -2,7 +2,7 @@
     "procFs": 16000,
     "c": 343,
     "nsample": 36000,
-    "N_harm": 30,
+    "N_harm": 8,
     "K": 2,
     "room": 
     {
@@ -12,13 +12,13 @@
     },
     "sphere":
     {
-        "location": [[2.4, 15.4, 1.7]],
+        "location": [[2.9, 12.7, 1.7]],
         "radius": 0.042,
         "type": "open"                       
     },
     "source":
     {
-        "location": [[4.7, 4.5, 1.6]],
+        "location": [[5.3, 6.5, 1.3]],
         "src_type": "o"
     },
     "ULA":
