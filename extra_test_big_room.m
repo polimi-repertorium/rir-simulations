@@ -85,21 +85,21 @@ for order = 1:length(order_tested)
     %create plots and save them as pics into folder
     H_rir = fft(h_rir, [], 2);
     plotcontainer.compare_rir(1, h_rir, h_smir, H_rir, H_smir, config.K, config.nsample, config.procFs)
-    RIR_filename_path = fullfile(RIR_folder, strcat(filename, '_order_extra', string(order), '.png'));
+    RIR_filename_path = fullfile(RIR_folder, strcat(filename, '_order_extra', string(order_tested(order)), '.png'));
     saveas(gcf,RIR_filename_path);
     
 
     % T60 SMIR estimation 
     plot_ok=1;
     T60_smir = Estimate_T60(h_smir, config.procFs, plot_ok);
-    T60_plot_path = fullfile(T60_folder, strcat(filename, '_smir_order_extra', string(order), '.png'));
+    T60_plot_path = fullfile(T60_folder, strcat(filename, '_smir_order_extra', string(order_tested(order)), '.png'));
     saveas(gcf,T60_plot_path);
     results(order+1,4) = T60_smir;
 
     % T60 RIR estimation 
     plot_ok=1;
     T60_rir = Estimate_T60(h_rir, config.procFs, plot_ok);
-    T60_plot_path = fullfile(T60_folder, strcat(filename, '_rir_order_extra', string(order), '.png'));
+    T60_plot_path = fullfile(T60_folder, strcat(filename, '_rir_order_extra', string(order_tested(order)), '.png'));
     saveas(gcf,T60_plot_path);
     results(order+1,5) = T60_rir;
 
