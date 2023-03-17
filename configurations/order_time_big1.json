@@ -6,7 +6,7 @@
     "K": 2,
     "room": 
     {
-        "dimension": [[7, 15, 4]],
+        "dimension": [[7, 20, 4]],
         "beta": 1.3,
         "max_order": 30
     },
