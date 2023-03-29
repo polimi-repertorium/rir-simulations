@@ -1,14 +1,14 @@
-addpath('rir-simulations/configurations');
-addpath('rir-simulations/src/lib');
-addpath('rir-simulations/src/SMIR-Generator/');
-addpath('rir-simulations/src/RIR-Generator/');
+addpath('configurations');
+addpath('src/lib');
+addpath('src/SMIR-Generator/');
+addpath('src/RIR-Generator/');
 
 % mkdir folders
-room_config_folder = ('rir-simulations/png/rooms');
-plot_folder = ('rir-simulations/png/plots');
-RIR_folder = ('rir-simulations/png/RIR');
-T60_folder = ('rir-simulations/png/T60');
-csv_folder = ('rir-simulations/results_csv');
+room_config_folder = ('png/rooms');
+plot_folder = ('png/plots');
+RIR_folder = ('png/RIR');
+T60_folder = ('png/T60');
+csv_folder = ('results_csv');
 
 mkdir(csv_folder)
 mkdir(plot_folder)
@@ -16,7 +16,7 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'big2';
+room = 'small';
 filename = strcat('order_time_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
@@ -45,7 +45,7 @@ saveas(gcf,room_filename_path);
 % initialization of results arrays
 results = zeros(config.room.max_order,3);
 
-for order = 1:config.room.max_order
+for order = 1:
     %adding order
     results(order+1,1) = order;
     

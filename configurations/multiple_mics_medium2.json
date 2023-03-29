@@ -2,7 +2,7 @@
     "procFs": 16000,
     "c": 343,
     "nsample": 9600,
-    "N_harm_max": 7,
+    "N_harm_max": 30,
     "K": 2,
     "room": 
     {

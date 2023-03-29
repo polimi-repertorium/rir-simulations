@@ -1,4 +1,4 @@
-clear;
+/nas/home/fronchini/rir-simulations/png/RIR/filterclear;
 close all;
 clc;
 addpath('configurations');
