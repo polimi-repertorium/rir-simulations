@@ -1,8 +1,7 @@
 { 
     "procFs": 16000,
     "c": 343,
-    "nsample": 8192,
-    "N_harm": 30,
+    "N_harm": 8,
     "K": 2,
     "room": 
     {

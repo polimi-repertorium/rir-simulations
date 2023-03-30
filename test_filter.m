@@ -7,6 +7,10 @@ addpath('src/lib');
 addpath('src/SMIR-Generator/');
 addpath('src/RIR-Generator/');
 
+test = true;
+cut_off = 30;
+
+
 folder_ext = 'filter';
 % mkdir folders
 room_config_folder = fullfile('png/rooms', folder_ext);
@@ -21,8 +25,8 @@ mkdir(room_config_folder)
 mkdir(RIR_folder)
 mkdir(T60_folder)
 
-room = 'big2';
-extension = '_filter';
+room = 'medium1';
+extension = '_HP';
 filename = strcat('order_time_', room);
 config_fname = strcat(filename, '.json');
 file_path  = fullfile("configurations/",config_fname);
@@ -45,15 +49,19 @@ config = utils.read_json(file_path);
 
 nsample = sprintf("%d", (config.room.beta * 1.5 * config.procFs));
 nsample = double(nsample);
-fprintf("Nsample: %d", nsample)
+%fprintf("Nsample: %d", nsample)
 
- % plot room 
-plotcontainer.plot_room(mic_pos, config.sphere.location, config.source.location, config.room.dimension)
-room_filename_path = fullfile(room_config_folder, strcat(filename, extension, '.png'));
-saveas(gcf,room_filename_path);
+%% plot room 
+%plotcontainer.plot_room(mic_pos, config.sphere.location, config.source.location, config.room.dimension)
+%room_filename_path = fullfile(room_config_folder, strcat(filename, extension, '.png'));
+%saveas(gcf,room_filename_path);
 
-% initialization of results array
-order_tested = [1, 6, 10, 20, 30];
+%% initialization of results array
+if test == false
+    order_tested = [10, 20, 30];
+else
+    order_tested = [6];
+end
 results = zeros(length(order_tested),6);
 
 for order = 1:length(order_tested)
@@ -71,31 +79,57 @@ for order = 1:length(order_tested)
             config.sphere.radius, ...
             mic, ...
             config.N_harm, ...
-            config.nsample, ...
+            nsample, ...
             config.K, ...
             order_tested(order), ...
             0, ...
-            1, ...
+            0, ...
             config.source.src_type, ...
             src_ang);
+
     t_smir_end = toc(t_smir_start);
     
     % timing
     results(order,2) = t_smir_end;
 
     % rir generation
-    h_rir = 4*pi*rir_generator(config.c, config.procFs, mic_pos, config.source.location, config.room.dimension, config.room.beta, config.nsample, 'omnidirectional', order_tested(order), 3, [0 0], true);
-    %h_smir = h_smir - h_smir(1);
-    err = utils.rir_error(h_rir, h_smir);
+    h_rir = 4*pi*rir_generator(config.c, config.procFs, mic_pos, config.source.location, config.room.dimension, config.room.beta, nsample, 'omnidirectional', order_tested(order), 3, [0 0], false);
+    
+    err = utils.rir_error(h_rir,  h_smir);
     results(order,3) = err;
 
     %create plots and save them as pics into folder
     H_rir = fft(h_rir, [], 2);
-    plotcontainer.compare_rir(1, h_rir, h_smir, H_rir, H_smir, config.K, config.nsample, config.procFs)
+
+    
+    %% apply filter 30 Hzto the rir generated
+    procFs = config.procFs;
+
+    %filter in time
+    h_smir_filtered = highpass(h_smir', cut_off, procFs)';
+    h_rir_filtered = highpass(h_rir', cut_off, procFs)';
+    
+    %filter in frequency
+    H_rir_filtered = highpass(H_rir', cut_off, procFs)';
+    H_smir_filtered = highpass(H_smir', cut_off, procFs)';
+    
+    
+    %% plot
+    % compare rir and smir
+    plotcontainer.compare_rir(1, h_rir, h_smir, H_rir, H_smir, config.K, nsample, config.procFs)
     RIR_filename_path = fullfile(RIR_folder, strcat(filename, extension, '_order_', string(order_tested(order)), '.png'));
     saveas(gcf,RIR_filename_path);
-    
 
+    % compare rir and smir filtered
+    plotcontainer.compare_rir(1, h_rir_filtered, h_smir_filtered, H_rir_filtered, H_smir_filtered, config.K, nsample, config.procFs)
+    RIR_filename_path = fullfile(RIR_folder, strcat(filename, extension, '_order_', string(order_tested(order)), '_filtered.png'));
+    saveas(gcf,RIR_filename_path);
+    %% T60 estimation
+    h_smir = h_smir_filtered;
+    h_rir = h_rir_filtered;
+    H_smir = H_smir_filtered;
+    H_rir = H_rir_filtered;
+    
     % T60 SMIR estimation 
     plot_ok=1;
     T60_smir = Estimate_T60(h_smir, config.procFs, plot_ok);
