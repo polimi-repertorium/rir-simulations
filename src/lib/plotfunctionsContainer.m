@@ -1,8 +1,7 @@
 classdef plotfunctionsContainer
     methods
-        function [] = plot_single_rir(~, mic_to_plot, h, nsample, procFs)
+        function [] = plot_rir(~, mic_to_plot, h, nsample, procFs)
             figure;
-            subplot(211);
             plot([0:nsample-1]/procFs, h(mic_to_plot,1:nsample), 'r')
             xlim([0 (nsample-1)/procFs]);
             title(['Room impulse response at microphone ', num2str(mic_to_plot)]);
@@ -10,6 +9,7 @@ classdef plotfunctionsContainer
             ylabel('Amplitude');
             legend('RIR generator'); % TODO: add wich generator has been used to generate the RIR?
         end 
+
 
         function [] = compare_rir(~, mic_to_plot, h_rir, h_smir, H_rir, H_smir, K, nsample, procFs)
 
