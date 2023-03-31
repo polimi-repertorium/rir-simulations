@@ -103,7 +103,7 @@ end
 % generate smir for spehrical mics -> parfor, filter, save all of them sofa format
 % we need to save the only in time
 
-% if I can give a time for a realistic case, that would be amazing!
+
 
 
 
