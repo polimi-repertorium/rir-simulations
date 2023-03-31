@@ -10,13 +10,10 @@ addpath('src/RIR-Generator/')
 fname = 'configuration.json';
 file_path  = fullfile("configurations/",fname);
 
-% TODO: Mic need to/4e added as angles to the JSON file
-[x, y, z, spherical_mic] = get_eigemike_pos();
-
 % containers
 utils = utilsContainer;
 plotcontainer = plotfunctionsContainer;
-%RT60 = RT60functionsContainer;
+
 
 %% read json file
 config = utils.read_json(file_path);
@@ -24,11 +21,8 @@ plot = config.plot;
 
 %% room configuration
 ULA_pos = config.ULA.position;
-%n_mic_ULA = size(ULA); ?? Ask for it
-%n_mic_ULA = n_mic(1);
-% configurration file in order on how we do need it
 
-n_ULA = config.n_ULA;
+n_ULA = size(config.ULA.position, 1);
 n_mic_ULA = config.ULA.n_mic;
 angle = config.ULA.angle;
 
@@ -53,11 +47,11 @@ for mic = 1:n_ULA
 end
 
 %% plot the room configurations
-source_pos = config.source.position;
+src_pos = config.source.position;
 sphere_pos = config.sphere.position;
 room_dim = config.room.dimension;
 
-%% plot room configuration (optional)
+
 if plot == 1
     % the room configuration will be plotted (make function)
      figure;
@@ -66,11 +60,10 @@ if plot == 1
      xlim([0, room_dim(1)])
      ylim([0, room_dim(2)])
      zlim([0, room_dim(3)])
-     scatter3(source_pos(:, 1), source_pos(:, 2), source_pos(:, 3), 'filled');
+     scatter3(src_pos(:, 1), src_pos(:, 2), src_pos(:, 3), 'filled');
      hold all;
      scatter3(sphere_pos(:, 1), sphere_pos(:, 2), sphere_pos(:, 3), 'filled');
      legend('Mic positions', 'Source position', 'Sphere position');
-
      % save the image
 end
 
@@ -84,12 +77,13 @@ cut_off = config.cut_off_HP;
 % nsample 
 nsample = double((beta * 1.5 * procFs));
 
-% add the if for the type of mic
-h_rir = rir_generator(c, procFs, mic_array, source_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
+% generate RIR for mics arrays
+h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
+% highpass filter
 h_rir = highpass(h_rir', cut_off, procFs)';
 % save the RIR as SOFA file format
 
-% option to plot and save the rir
+% option to plot and the rir
 if plot == 1
     for mic = 1:length(mic_array)
         plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
@@ -98,10 +92,44 @@ end
 
 
 % save all of them with the sofa format
-% maybe would make ssense to calculate how fast is the generation of the parfor and using the build function of generate RIR for one then one
+% maybe would make sense to calculate how fast is the generation of the parfor and using the build function of generate RIR for one then one
 
-% generate smir for spehrical mics -> parfor, filter, save all of them sofa format
-% we need to save the only in time
+%% SMIR generation 
+n_mic_sphere = size(config.sphere.position, 1);
+[x, y, z, spherical_mic] = get_eigemike_pos();
+sphere_pos = config.sphere.position;
+sphere_type = config.sphere.type; 
+sphere_radius = config.sphere.radius;
+src_type = config.source.src_type;
+K = config.K;
+N_harm = config.N_harm;
+
+[src_ang(:, 1),src_ang(:, 2)] = mycart2sph(sphere_pos(:, 1)-src_pos(1),sphere_pos(:, 2)-src_pos(2),sphere_pos(:, 3)-src_pos(3)); % Towards the receiver
+
+parfor mic = 1:n_mic_sphere
+    [h_smir, H_smir, beta_hat] = smir_generator(c, ...
+        procFs, ...
+        sphere_pos(mic, :), ...
+        src_pos, ...
+        room_dim, ...
+        beta, ...
+        sphere_type, ...
+        sphere_radius, ...
+        spherical_mic, ...
+        N_harm, ...
+        nsample, ...
+        K, ...
+        order, ...
+        0, ...
+        0, ...
+        src_type, ...
+        src_ang(mic, :));
+    h_smir = highpass(h_smir', cut_off, procFs)'
+    %save all of them sofa format
+end
+
+
+
 
 
 
