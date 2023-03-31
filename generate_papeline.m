@@ -2,11 +2,14 @@ clear;
 close all;
 clc;
 
+
 addpath('configurations')
 addpath('src/lib')
 addpath('src/SMIR-Generator/')
 addpath('src/RIR-Generator/')
+addpath('SOFAtoolbox')
 
+SOFAstart;
 fname = 'configuration.json';
 file_path  = fullfile("configurations/",fname);
 
@@ -80,12 +83,16 @@ nsample = double((beta * 1.5 * procFs));
 % generate RIR for mics arrays
 h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
 % highpass filter
-h_rir = highpass(h_rir', cut_off, procFs)';
-% save the RIR as SOFA file format
+h_rir = highpass(h_rir', cut_off, procFs);
+
+for mic = 1:length(mic_array)
+    saveRIR(h_rir(mic, :))
+end
 
 % option to plot and the rir
 if plot == 1
     for mic = 1:length(mic_array)
+        
         plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
     end
 end
