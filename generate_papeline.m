@@ -7,7 +7,11 @@ addpath('configurations')
 addpath('src/lib')
 addpath('src/SMIR-Generator/')
 addpath('src/RIR-Generator/')
-addpath('SOFAtoolbox')
+addpath('src/lib/SOFAtoolbox')
+
+% make dir
+sofa_folder = 'SOFAfiles';
+mkdir(sofa_folder)
 
 SOFAstart;
 fname = 'configuration.json';
@@ -85,14 +89,16 @@ h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'o
 % highpass filter
 h_rir = highpass(h_rir', cut_off, procFs);
 
-for mic = 1:length(mic_array)
-    saveRIR(h_rir(mic, :))
+for mic = 1:n_ULA
+    IR = h_rir(:, (n_mic_ULA*mic-(n_mic_ULA-1):n_mic_ULA*mic));
+    mic_pos = mic_array(n_mic_ULA*mic-(n_mic_ULA-1):n_mic_ULA*mic, :);
+    full_path_filename = fullfile(SOFAdbPath);
+    writeSOFA(IR, nsample, mic_pos, full_path_filename)
 end
 
 % option to plot and the rir
 if plot == 1
     for mic = 1:length(mic_array)
-        
         plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
     end
 end
