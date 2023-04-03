@@ -110,7 +110,6 @@ if plot == 1
     end
 end
 
-
 % save all of them with the sofa format
 % maybe would make sense to calculate how fast is the generation of the parfor and using the build function of generate RIR for one then one
 
