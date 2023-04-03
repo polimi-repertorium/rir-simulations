@@ -96,6 +96,7 @@ for mic = 1:n_ULA
 end
 
 %% load SOFA file
+full_path_filename = fullfile(SOFAdbPath, 'GeneralFIRtest.sofa');
 Obj = SOFAload(full_path_filename);
 disp('object loaded')
 IR_taken = Obj.Data.IR;
