@@ -15,12 +15,11 @@ mkdir(sofa_folder)
 
 SOFAstart;
 fname = 'configuration.json';
-file_path  = fullfile("configurations/",fname);
+file_path = fullfile("configurations/",fname);
 
 % containers
 utils = utilsContainer;
 plotcontainer = plotfunctionsContainer;
-
 
 %% read json file
 config = utils.read_json(file_path);
@@ -103,7 +102,6 @@ IR_taken = Obj.Data.IR;
 plotcontainer.plot_rir(1, IR_taken, nsample, procFs)
 
 % option to plot and the rir
-plot = 1;
 if plot == 1
     for mic = 1:size(mic_array, 1)
         plotcontainer.plot_rir(mic, h_rir', nsample, procFs)

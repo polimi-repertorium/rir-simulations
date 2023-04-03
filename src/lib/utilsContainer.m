@@ -66,14 +66,14 @@ classdef utilsContainer
             %Vruc=[R*V']'; %Rotating un-centred coordinates
             Vr=Vrc+ones(size(V,1),1)*V_centre; %Shifting back to original location
             
-            if plot == 1
-                figure;
-                plot3(V(:,1),V(:,2),V(:,3), 'g.-', MarkerSize=25);  
-                hold on; %Original
-                plot3(Vr(:,1),Vr(:,2),Vr(:,3),'r.-', MarkerSize=25); %Rotated around centre of line
-                %scatter3(Vruc(:,1),Vruc(:,2),Vruc(:,3),'b'); %Rotated around origin
-                grid on;
-            end
+            %if plot == 1
+            %    figure;
+            %    plot3(V(:,1),V(:,2),V(:,3), 'g.-', MarkerSize=25);  
+            %    hold on; %Original
+            %    plot3(Vr(:,1),Vr(:,2),Vr(:,3),'r.-', MarkerSize=25); %Rotated around centre of line
+            %    %scatter3(Vruc(:,1),Vruc(:,2),Vruc(:,3),'b'); %Rotated around origin
+            %    grid on;
+            %end
         end 
 
     end
