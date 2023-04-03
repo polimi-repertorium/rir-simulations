@@ -96,10 +96,17 @@ for mic = 1:n_ULA
     writeSOFA(IR, nsample, mic_pos, full_path_filename)
 end
 
+%% load SOFA file
+Obj = SOFAload('/Users/francescaronchini/repertorium/rir-simulations/src/lib/data/SOFA/GeneralFIRtest.sofa');
+disp('object loaded')
+IR_taken = Obj.Data.IR;
+plotcontainer.plot_rir(1, IR_taken, nsample, procFs)
+
 % option to plot and the rir
+plot = 1;
 if plot == 1
-    for mic = 1:length(mic_array)
-        plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
+    for mic = 1:size(mic_array, 1)
+        plotcontainer.plot_rir(mic, h_rir', nsample, procFs)
     end
 end
 
