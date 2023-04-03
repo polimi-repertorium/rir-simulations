@@ -9,18 +9,18 @@ function [] = writeSOFA(rir, nsample, mic_pos, full_path_filename)
     % Create the impulse response (we have them)
     N=nsample;
     IR=rir;
-    R=size(rir, 2); %(number of receiveres)
+    R=size(rir, 1); %(number of receiveres)
     disp(R)
     
     % Fill data with data
     M=1; % only one measurement
-    Obj.Data.IR = NaN(R,M,N); % data.IR must be [M R N]
+    Obj.Data.IR = NaN(M,R,N); % data.IR must be [M R N]
     
-
-    for mic = 1:R
-        Obj.Data.IR(mic,1,:)=IR(:, mic);
-        Obj.SourcePosition(mic,:)=mic_pos(mic, :);
-    end
+    %for mic = 1:R
+    Obj.Data.IR(1,:,:)=IR(:, :);
+    Obj.SourcePosition(:,:)=mic_pos(:, :);
+    Obj.Data.Delay = zeros(1, R);
+    %end
     
     %% Update dimensions
     Obj=SOFAupdateDimensions(Obj);

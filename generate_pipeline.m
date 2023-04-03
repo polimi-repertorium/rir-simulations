@@ -95,11 +95,14 @@ mic_array = zeros(ULA_n_mic*ULA_n, 3);
 % generate RIR for mics arrays
 h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
 % highpass filter
-h_rir = highpass(h_rir', cut_off, procFs);
+h_rir = highpass(h_rir', cut_off, procFs)';
 
 for mic = 1:ULA_n
-    IR = h_rir(:, (ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic));
-    mic_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
+    %IR = h_rir(:, (ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic));
+    IR = h_rir((ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic), :);
+    %mic_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
+    mic_pos = ULA_pos(mic, :);
+    disp(mic_pos)
     full_path_filename = fullfile(SOFAdbPath);
     writeSOFA(IR, nsample, mic_pos, full_path_filename)
 end
@@ -107,7 +110,7 @@ end
 % rir plot (optional)
 if plot == 1
     for mic = 1:size(mic_array, 1)
-        plotcontainer.plot_rir(mic, h_rir', nsample, procFs)
+        plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
     end
 end
 
@@ -138,11 +141,10 @@ for mic = 1:sph_n_mic
         src_type, ...
         src_ang(mic, :));
     
-    h_smir = highpass(h_smir', cut_off, procFs);
+    h_smir = highpass(h_smir', cut_off, procFs)';
     IR = h_smir;
     full_path_filename = fullfile(SOFAdbPath);
-    mic_sph_pos = [x(:) y(:) z(:)];
-    writeSOFA(IR, nsample, mic_sph_pos, full_path_filename)
+    writeSOFA(IR, nsample, sph_pos(mic, :), full_path_filename)
 end
 
 
