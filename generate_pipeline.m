@@ -87,7 +87,7 @@ if plot == 1
 end
 
 %% RIR generation (for ULA, mic arrra)
-source = 1;
+
 parfor source = 1:size(src_pos, 1)
     % generate RIR for mics arrays
     h_rir = rir_generator(c, procFs, mic_array, src_pos(source, :), room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
@@ -121,8 +121,7 @@ parfor source = 1:size(src_pos, 1)
     %[src_tmp(:, 1), src_tmp(start:stop, 2)] = mycart2sph(SMA_pos(:, 1)-src_pos(source, 1),SMA_pos(:, 2)-src_pos(source, 2),SMA_pos(:, 3)-src_pos(source, 3)); % Towards the receiver
     [src_ang_1, src_ang_2] = mycart2sph(SMA_pos(:, 1)-src_pos(source, 1),SMA_pos(:, 2)-src_pos(source, 2),SMA_pos(:, 3)-src_pos(source, 3)); % Towards the receiver
     src_ang = [src_ang_1, src_ang_2];
-    
-    
+
     for mic = 1:SMA_n_mic
         [h_smir, H_smir, beta_hat] = smir_generator(c, ...
             procFs, ...
@@ -150,7 +149,6 @@ parfor source = 1:size(src_pos, 1)
         writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename)
     end
 end
-
 
 % save JSON file for the RIRs and SMIRs generated
 file_JSON_path = fullfile(JSON_out, config.output_config_filename);
