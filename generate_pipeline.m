@@ -54,7 +54,7 @@ order = config.room.order;
 beta = config.room.beta;
 
 % nsample 
-nsample = double((beta * 1.5 * procFs));
+nsample = int64((beta * 1.5 * procFs));
 
 %% ROOM Configuration 
 % positioning the ULA according to axes and rotation
@@ -90,7 +90,7 @@ if plot == 1
 end
 
 %% RIR generation (for ULA, mic arrray)
-mic_array = zeros(ULA_n_mic*ULA_n, 3);
+mic_array = ULA_pos;
 
 % generate RIR for mics arrays
 h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
@@ -102,10 +102,12 @@ for mic = 1:ULA_n
     IR = h_rir((ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic), :);
     %mic_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
     mic_pos = ULA_pos(mic, :);
-    disp(mic_pos)
+    disp(mic_pos);
+    receiver_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
     full_path_filename = fullfile(SOFAdbPath);
-    writeSOFA(IR, nsample, mic_pos, full_path_filename)
+    writeSOFA(IR, nsample, mic_pos, receiver_pos, full_path_filename)
 end
+
 
 % rir plot (optional)
 if plot == 1
@@ -114,11 +116,11 @@ if plot == 1
     end
 end
 
-% maybe would make sense to calculate how fast is the generation of the parfor and using the build function of generate RIR for one then one
 
 %% SMIR generation 
 sph_n_mic = size(config.sphere.position, 1);
 [x, y, z, sph_mic] = get_eigemike_pos();
+mic_pos_cart = [x, y, z];
 
 [src_ang(:, 1),src_ang(:, 2)] = mycart2sph(sph_pos(:, 1)-src_pos(1),sph_pos(:, 2)-src_pos(2),sph_pos(:, 3)-src_pos(3)); % Towards the receiver
 
@@ -133,7 +135,7 @@ for mic = 1:sph_n_mic
         sph_radius, ...
         sph_mic, ...
         N_harm, ...
-        nsample, ...
+        double(nsample), ...
         K, ...
         order, ...
         0, ...
@@ -141,10 +143,12 @@ for mic = 1:sph_n_mic
         src_type, ...
         src_ang(mic, :));
     
+    
     h_smir = highpass(h_smir', cut_off, procFs)';
+    
     IR = h_smir;
     full_path_filename = fullfile(SOFAdbPath);
-    writeSOFA(IR, nsample, sph_pos(mic, :), full_path_filename)
+    writeSOFA(IR, nsample, mic_pos_cart(mic, :), sph_pos(mic, :), full_path_filename)
 end
 
 

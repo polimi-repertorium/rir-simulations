@@ -1,4 +1,4 @@
-function [] = writeSOFA(rir, nsample, mic_pos, full_path_filename)
+function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
     SOFAstart;
     
     %% Get an empy conventions structure
@@ -7,18 +7,22 @@ function [] = writeSOFA(rir, nsample, mic_pos, full_path_filename)
     Obj = SOFAgetConventions(conventions);
     
     % Create the impulse response (we have them)
-    N=nsample;
+    N=int64(nsample);
     IR=rir;
     R=size(rir, 1); %(number of receiveres)
-    disp(R)
+ 
     
     % Fill data with data
     M=1; % only one measurement
     Obj.Data.IR = NaN(M,R,N); % data.IR must be [M R N]
+    Obj.Data.Delay = zeros(1, R);
+    Obj=SOFAupdateDimensions(Obj);
+    disp(Obj.API.R)
     
     %for mic = 1:R
     Obj.Data.IR(1,:,:)=IR(:, :);
-    Obj.SourcePosition(:,:)=mic_pos(:, :);
+    Obj.ListenerPosition(:,:)=mic_pos(:, :);
+    Obj.ReceiverPosition(:,:)=receiver_pos(:, :);
     Obj.Data.Delay = zeros(1, R);
     %end
     
