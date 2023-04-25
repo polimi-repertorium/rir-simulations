@@ -13,6 +13,10 @@ addpath('src/lib/SOFAtoolbox')
 mkdir(SOFAdbPath)
 SOFAstart;
 
+% make dir to save configurations used
+JSON_out = "configurations/RIR_generated";
+mkdir(JSON_out);
+
 % configuration file
 fname = 'configuration.json';
 file_path = fullfile("configurations/",fname);
@@ -149,6 +153,9 @@ for mic = 1:SMA_n_mic
     writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename)
 end
 
+% save JSON file for the RIRs and SMIRs generated
+file_JSON_path = fullfile(JSON_out, "test.json");
+utils.write_json(config, file_JSON_path);
 
 
 
