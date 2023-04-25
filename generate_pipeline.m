@@ -89,8 +89,7 @@ if plot == 1
      % save the image
 end
 
-%% RIR generation (for ULA, mic arrray)
-mic_array = ULA_pos;
+%% RIR generation (for ULA, mic arrra)
 
 % generate RIR for mics arrays
 h_rir = rir_generator(c, procFs, mic_array, src_pos, room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
