@@ -22,7 +22,6 @@ utils = utilsContainer;
 plotcontainer = plotfunctionsContainer;
 
 %% read json file
-% read JSON file and save data into variables
 config = utils.read_json(file_path);
 plot = config.plot;
 c = config.c;
@@ -30,6 +29,15 @@ procFs = config.procFs;
 cut_off = config.cut_off_HP;
 K = config.K;
 N_harm = config.N_harm;
+
+% source configuration
+src_pos = config.source.position;
+src_type = config.source.src_type;
+
+% room configuration
+room_dim = config.room.dimension;
+order = config.room.order;
+beta = config.room.beta;
 
 % ULA configuration
 ULA_pos = config.ULA.position;
@@ -39,19 +47,10 @@ ULA_angle = config.ULA.angle;
 ULA_dim_pos = config.ULA.dim_pos;
 ULA_step = config.ULA.step;
 
-% source configuration
-src_pos = config.source.position;
-src_type = config.source.src_type;
-
-% spherical mic
-sph_pos = config.sphere.position;
-sph_type = config.sphere.type; 
-sph_radius = config.sphere.radius;
-
-% room configuration
-room_dim = config.room.dimension;
-order = config.room.order;
-beta = config.room.beta;
+% spherical microphone array (SMA)
+SMA_pos = config.SMA.position;
+SMA_type = config.SMA.type; 
+SMA_radius = config.SMA.radius;
 
 % nsample 
 nsample = int64((beta * 1.5 * procFs));
@@ -117,22 +116,22 @@ end
 
 
 %% SMIR generation 
-sph_n_mic = size(config.sphere.position, 1);
-[x, y, z, sph_mic] = get_eigemike_pos();
+SMA_n_mic = size(SMA_pos, 1);
+[x, y, z, SMA_mic] = get_eigemike_pos();
 mic_pos_cart = [x, y, z];
 
-[src_ang(:, 1),src_ang(:, 2)] = mycart2sph(sph_pos(:, 1)-src_pos(1),sph_pos(:, 2)-src_pos(2),sph_pos(:, 3)-src_pos(3)); % Towards the receiver
+[src_ang(:, 1),src_ang(:, 2)] = mycart2sph(SMA_pos(:, 1)-src_pos(1),SMA_pos(:, 2)-src_pos(2),SMA_pos(:, 3)-src_pos(3)); % Towards the receiver
 
-for mic = 1:sph_n_mic
+for mic = 1:SMA_n_mic
     [h_smir, H_smir, beta_hat] = smir_generator(c, ...
         procFs, ...
-        sph_pos(mic, :), ...
+        SMA_pos(mic, :), ...
         src_pos, ...
         room_dim, ...
         beta, ...
-        sph_type, ...
-        sph_radius, ...
-        sph_mic, ...
+        SMA_type, ...
+        SMA_radius, ...
+        SMA_mic, ...
         N_harm, ...
         double(nsample), ...
         K, ...
@@ -147,7 +146,7 @@ for mic = 1:sph_n_mic
     
     IR = h_smir;
     full_path_filename = fullfile(SOFAdbPath);
-    writeSOFA(IR, nsample, mic_pos_cart(mic, :), sph_pos(mic, :), full_path_filename)
+    writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename)
 end
 
 
