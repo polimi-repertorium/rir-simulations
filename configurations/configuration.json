@@ -5,6 +5,7 @@
     "cut_off_HP": 30,
     "K": 2,
     "plot": 0,
+    "output_config_filename": "test.json",
     "room": 
     {
         "dimension": [[7, 5, 4]],
@@ -13,16 +14,15 @@
     },
     "source":
     {
-        "position": [[4.7, 3.7, 1.6]],
-        "src_type": "o"
+        "position": [[4.7, 3.7, 1.6], [4.5, 3.2, 1.6]],
+        "src_type": ["o", "o"]
     },
     "ULA":
     {
         "position": [[2, 1.5, 2.2]], 
         "n_mic": 1,
         "step": 0.05,
-        "angle": [45, 20],
-        "dim_pos": [1, 1]
+        "angle": [45, 20]
     },
     "SMA": 
     {

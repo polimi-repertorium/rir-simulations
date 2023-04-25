@@ -48,14 +48,9 @@ classdef utilsContainer
             saveas(gcf,filename_path)
         end
 
-        function [rot, stat] = rotate(~, ULA_pos, n_mic_ULA, mic, step, dim_pos)
-            
-            if dim_pos == 1
-                dim_sta = 2;
-            else
-                dim_sta = 1;
-            end
-
+        function [rot, stat] = rotate(~, ULA_pos, n_mic_ULA, mic, step)
+            dim_pos = 1;
+            dim_sta = 2;
             stat = ULA_pos(mic, dim_sta).* ones(1, n_mic_ULA);
             rot = ULA_pos(mic, dim_pos):step:(ULA_pos(mic, dim_pos)+(step*(n_mic_ULA-1)));
         end 
