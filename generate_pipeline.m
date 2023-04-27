@@ -17,6 +17,10 @@ SOFAstart;
 JSON_out = "configurations/RIR_generated";
 mkdir(JSON_out);
 
+% make dir to save room configurations
+room_config_plot = "configurations/room";
+mkdir(room_config_plot);
+
 % configuration file
 fname = 'configuration.json';
 file_path = fullfile("configurations/",fname);
@@ -24,9 +28,10 @@ file_path = fullfile("configurations/",fname);
 % containers
 utils = utilsContainer;
 plotcontainer = plotfunctionsContainer;
+JSONio = JSONContainer;
 
 %% read json file
-config = utils.read_json(file_path);
+config = JSONio.read_json(file_path);
 plot = config.plot;
 c = config.c;
 procFs = config.procFs;
@@ -72,21 +77,12 @@ end
 
 % optional plot for room configuration
 if plot == 1
-    % the room configuration will be plotted (make function)
-     figure;
-     scatter3(mic_array(:,1), mic_array(:,2), mic_array(:,3), 'filled');
-     hold on;
-     xlim([0, room_dim(1)])
-     ylim([0, room_dim(2)])
-     zlim([0, room_dim(3)])
-     scatter3(src_pos(:, 1), src_pos(:, 2), src_pos(:, 3), 'filled');
-     hold all;
-     scatter3(sph_pos(:, 1), sph_pos(:, 2), sph_pos(:, 3), 'filled');
-     legend('Mic positions', 'Source position', 'Sphere position');
-     % save the image
+    save_plot_path = fullfile(room_config_plot, "test.png");
+    plotcontainer.plot_room(mic_array, SMA_pos, src_pos, room_dim, save_plot_path)
 end
 
 %% RIR generation (for ULA, mic arrra)
+plot = 0;
 
 parfor source = 1:size(src_pos, 1)
     % generate RIR for mics arrays
@@ -107,6 +103,7 @@ parfor source = 1:size(src_pos, 1)
     
     
     % rir plot (optional)
+    
     if plot == 1
         for mic = 1:size(mic_array, 1)
             plotcontainer.plot_rir(mic, h_rir, nsample, procFs)
@@ -152,7 +149,7 @@ end
 
 % save JSON file for the RIRs and SMIRs generated
 file_JSON_path = fullfile(JSON_out, config.output_config_filename);
-utils.write_json(config, file_JSON_path);
+JSONio.write_json(config, file_JSON_path);
 
 
 
