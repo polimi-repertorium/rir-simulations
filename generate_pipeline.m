@@ -148,7 +148,7 @@ parfor source = 1:size(src_pos, 1)
         % smir plot
         if plot == 1
             for mic_plot = 1:size(SMA_mic, 1)
-                RIR_plot_path = fullfile(RIR_plot, strcat("SMIR_test_source_", int2str(source), "_mic_", int2str(mic), ".png"));
+                RIR_plot_path = fullfile(RIR_plot, strcat("SMIR_test_source_", int2str(source), "_mic_", int2str(mic_plot), ".png"));
                 plotcontainer.plot_rir(mic_plot, h_smir, double(nsample), procFs, RIR_plot_path)
             end
         end
