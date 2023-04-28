@@ -88,7 +88,7 @@ if plot == 1
 end
 
 %% RIR generation (for ULA, mic arrra)
-for source = 1:size(src_pos, 1)
+parfor source = 1:size(src_pos, 1)
     % generate RIR for mics arrays
     h_rir = rir_generator(c, procFs, mic_array, src_pos(source, :), room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
     % highpass filter
