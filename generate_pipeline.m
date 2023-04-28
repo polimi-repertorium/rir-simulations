@@ -67,7 +67,7 @@ SMA_type = config.SMA.type;
 SMA_radius = config.SMA.radius;
 
 % nsample 
-nsample = int64((beta * 1.5 * procFs));
+nsample = int64(beta * 1.5 * procFs);
 
 %% ROOM Configuration 
 % positioning the ULA according to axes and rotation
@@ -82,45 +82,42 @@ for mic = 1:ULA_n
 end
 
 % optional plot for room configuration
-plot = 0;
 if plot == 1
     save_plot_path = fullfile(room_config_plot, "test.png");
     plotcontainer.plot_room(mic_array, SMA_pos, src_pos, room_dim, save_plot_path)
 end
 
 %% RIR generation (for ULA, mic arrra)
-plot = 1;
-parfor source = 1:size(src_pos, 1)
+for source = 1:size(src_pos, 1)
     % generate RIR for mics arrays
     h_rir = rir_generator(c, procFs, mic_array, src_pos(source, :), room_dim, beta, nsample, 'omnidirectional', order, 3, [0 0], false);
     % highpass filter
     h_rir = highpass(h_rir', cut_off, procFs)';
-    
+
+
     for mic = 1:ULA_n
         %IR = h_rir(:, (ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic));
         IR = h_rir((ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic), :);
         %mic_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
         mic_pos = ULA_pos(mic, :);
-        disp(mic_pos);
         receiver_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
         full_path_filename = fullfile(SOFAdbPath);
         writeSOFA(IR, nsample, mic_pos, receiver_pos, full_path_filename)
     end
-    
-    
-    % rir plot 
+
+    % rir plot
     if plot == 1
         for mic = 1:size(mic_array, 1)
-            RIR_plot_path = fullfile(RIR_plot, "RIR_test.png");
-            plotcontainer.plot_rir(mic, h_rir, nsample, procFs, RIR_plot_path)
+            RIR_plot_path = fullfile(RIR_plot, strcat("RIR_test_", int2str(mic), ".png"));
+            plotcontainer.plot_rir(mic, h_rir, double(nsample), procFs, RIR_plot_path)
         end
     end
-    
+
     %% SMIR generation
     SMA_n_mic = size(SMA_pos, 1);
     [x, y, z, SMA_mic] = get_eigemike_pos();
     mic_pos_cart = [x, y, z];
-    
+
     %[src_tmp(:, 1), src_tmp(start:stop, 2)] = mycart2sph(SMA_pos(:, 1)-src_pos(source, 1),SMA_pos(:, 2)-src_pos(source, 2),SMA_pos(:, 3)-src_pos(source, 3)); % Towards the receiver
     [src_ang_1, src_ang_2] = mycart2sph(SMA_pos(:, 1)-src_pos(source, 1),SMA_pos(:, 2)-src_pos(source, 2),SMA_pos(:, 3)-src_pos(source, 3)); % Towards the receiver
     src_ang = [src_ang_1, src_ang_2];
@@ -143,10 +140,18 @@ parfor source = 1:size(src_pos, 1)
             0, ...
             src_type(source), ...
             src_ang(mic, :));
-    
-    
-        h_smir = highpass(h_smir', cut_off, procFs)';
-    
+
+
+        h_smir = highpass(h_smir', cut_off, procFs)';  
+
+        % smir plot
+        if plot == 1
+            for mic_plot = 1:size(SMA_mic, 1)
+                RIR_plot_path = fullfile(RIR_plot, strcat("SMIR_test_", int2str(mic_plot), ".png"));
+                plotcontainer.plot_rir(mic_plot, h_smir, double(nsample), procFs, RIR_plot_path)
+            end
+        end
+
         IR = h_smir;
         full_path_filename = fullfile(SOFAdbPath);
         writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename)
