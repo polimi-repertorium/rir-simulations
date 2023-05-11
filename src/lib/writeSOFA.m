@@ -20,17 +20,13 @@ function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
     Obj.EmitterPosition_Type = 'cartesian';
     Obj.ReceiverPosition_Units = 'metre, metre, metre';
     Obj.EmitterPosition_Units = 'metre, metre, metre';
-    disp(Obj)
+    
 
     Obj.Data.IR(1,:,:)=IR(:, :);
-    disp(size(Obj.Data.IR))
-    Obj=SOFAupdateDimensions(Obj);
     Obj.ListenerPosition(:,:)=mic_pos(:, :);
-   
-    disp(size(Obj.ReceiverPosition))
     Obj.ReceiverPosition=receiver_pos(:, :);
     
-    
+
     
     %% Update dimensions
     Obj=SOFAupdateDimensions(Obj);
