@@ -2,7 +2,7 @@ function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
     SOFAstart;
     
     %% Get an empy conventions structure
-    conventions='GeneralFIR';
+    conventions='SingleRoomSRIR';
     disp(['Creating SOFA file with ' conventions 'conventions...']);
     Obj = SOFAgetConventions(conventions);
     
@@ -10,21 +10,27 @@ function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
     N=int64(nsample);
     IR=rir;
     R=size(rir, 1); %(number of receiveres)
- 
-    
+
     % Fill data with data
     M=1; % only one measurement
-    Obj.Data.IR = NaN(M,R,N); % data.IR must be [M R N]
+    Obj.Data.IR = zeros(M,R,N); % data.IR must be [M R N]
+    disp(size(Obj.Data.IR))
     Obj.Data.Delay = zeros(1, R);
-    Obj=SOFAupdateDimensions(Obj);
-    disp(Obj.API.R)
-    
-    %for mic = 1:R
+    Obj.ReceiverPosition_Type = 'cartesian';
+    Obj.EmitterPosition_Type = 'cartesian';
+    Obj.ReceiverPosition_Units = 'metre, metre, metre';
+    Obj.EmitterPosition_Units = 'metre, metre, metre';
+    disp(Obj)
+
     Obj.Data.IR(1,:,:)=IR(:, :);
+    disp(size(Obj.Data.IR))
+    Obj=SOFAupdateDimensions(Obj);
     Obj.ListenerPosition(:,:)=mic_pos(:, :);
-    Obj.ReceiverPosition(:,:)=receiver_pos(:, :);
-    Obj.Data.Delay = zeros(1, R);
-    %end
+   
+    disp(size(Obj.ReceiverPosition))
+    Obj.ReceiverPosition=receiver_pos(:, :);
+    
+    
     
     %% Update dimensions
     Obj=SOFAupdateDimensions(Obj);
