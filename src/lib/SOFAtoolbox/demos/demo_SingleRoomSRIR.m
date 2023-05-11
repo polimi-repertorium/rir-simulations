@@ -20,8 +20,10 @@ Obj = SOFAgetConventions(conventions);
 
 %% Fill random data...
 Obj.Data.IR=rand(4800,1);
-Obj.ListenerPosition=zeros(4800,3); Obj.ListenerPosition(:,1)=1;
-Obj.SourcePosition=zeros(4800,3); Obj.SourcePosition(:,2)=1;
+Obj.ListenerPosition=zeros(4800,3); 
+Obj.ListenerPosition(:,1)=1;
+Obj.SourcePosition=zeros(4800,3); 
+Obj.SourcePosition(:,2)=1;
 
 % Add ReceiverDescriptions as string array
 str={};
