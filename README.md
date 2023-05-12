@@ -1,6 +1,10 @@
 # RIR-SIMULATIONS
 Repositiory for RIR simulations of controlled room acoustics with ULA and SMA.
 
+The repository is based on: 
+- [RIR_Generatorr](https://github.com/ehabets/RIR-Generator)
+- [SMIR_Generatorr](https://github.com/ehabets/SMIR-Generator)
+
 ## Simulation pipeline
 The following image depicts the general pipeline for the desired RIR simulation framework.
 ![pipeline](imgs/pipeline.png "pipeline")
@@ -20,9 +24,4 @@ rir-simulations
 └── LICENSE
 ```
 
-## TODO list
-- [x] Block scheme pipeline
-- [ ] RIR & SMIR generators
-- [ ] Read room setting from JSON file
-- [ ] Mics on nodal lines of the room
-- [ ] Comparison between input T60 and estimated T60 from the computed RIR
+
