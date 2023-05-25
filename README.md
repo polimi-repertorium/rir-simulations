@@ -1,5 +1,5 @@
 # RIR-SIMULATIONS
-Repositiory for Room Impulse Response (RIR) simulations of controlled room acoustics with Uniform Linear Array (ULA) and Spherical Microphone Array (SMA).
+Repositiory for Room Impulse Response (RIR) simulations of controlled rooms with Uniform Linear Array (ULA) and Spherical Microphone Array (SMA).
 
 The repository is based on: 
 - [RIR_Generatorr](https://github.com/ehabets/RIR-Generator)
