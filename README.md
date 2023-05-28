@@ -27,4 +27,4 @@ rir-simulations
 
 
 The file [generate_pipeline.m](/generate_pipeline.m) contains a complete example of simulation examples. 
-This script generate the desidered RIR using the configuration defined in [configuration.json](/configurations/configuration.json) file.
+This script generates the desidered RIR according to the configuration defined in [configuration.json](/configurations/configuration.json) file.
