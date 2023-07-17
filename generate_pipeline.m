@@ -30,7 +30,7 @@ room_config_plot = fullfile(plot_dir, "room");
 mkdir(room_config_plot);
 
 % configuration file
-fname = 'configuration_tmp.json';
+fname = 'configuration.json';
 file_path = fullfile("configurations/",fname);
 
 % containers
