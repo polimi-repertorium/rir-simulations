@@ -1,4 +1,4 @@
-function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
+function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename, ext)
     SOFAstart;
     
     %% Get an empy conventions structure
@@ -39,7 +39,7 @@ function [] = writeSOFA(rir, nsample, mic_pos, receiver_pos, full_path_filename)
     Obj.GLOBAL_Comment = 'Contains simple pulses for mic array containing 4 receivers';
     
     %% save the SOFA file
-    SOFAfn=fullfile(full_path_filename,[conventions 'test.sofa']);
+    SOFAfn=fullfile(full_path_filename,[conventions '_' ext '.sofa']);
     disp(['Saving:  ' SOFAfn]);
     Obj=SOFAsave(SOFAfn, Obj);
 end

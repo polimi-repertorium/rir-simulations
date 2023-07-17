@@ -14,6 +14,7 @@ plot_dir = "plots";
 
 % make dir for saving SOFA files
 mkdir(SOFAdbPath)
+display(SOFAdbPath)
 SOFAstart;
 
 % make dir to save configurations used
@@ -29,7 +30,7 @@ room_config_plot = fullfile(plot_dir, "room");
 mkdir(room_config_plot);
 
 % configuration file
-fname = 'configuration.json';
+fname = 'configuration_tmp.json';
 file_path = fullfile("configurations/",fname);
 
 % containers
@@ -105,7 +106,8 @@ for mic = 1:ULA_n
     mic_pos = ULA_pos(mic, :);
     receiver_pos = mic_array(ULA_n_mic*mic-(ULA_n_mic-1):ULA_n_mic*mic, :);
     full_path_filename = fullfile(SOFAdbPath);
-    writeSOFA(IR, nsample, mic_pos, receiver_pos, full_path_filename)
+    extRIR = ['RIR_mic_' num2str(mic,'%02d')];
+    writeSOFA(IR, nsample, mic_pos, receiver_pos, full_path_filename, extRIR)
 end
 
 % rir plot
@@ -157,7 +159,8 @@ for mic = 1:SMA_n_mic
 
     IR = h_smir;
     full_path_filename = fullfile(SOFAdbPath);
-    writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename)
+    extSMIR = ['SMIR_mic_' num2str(mic,'%02d')];
+    writeSOFA(IR, nsample, mic_pos_cart(mic, :), SMA_pos(mic, :), full_path_filename, extSMIR)
 end
 %end
 
